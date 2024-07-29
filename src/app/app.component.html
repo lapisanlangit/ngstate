@@ -1,0 +1,31 @@
+<button (click)="retrieveData()">Retrive Data</button>
+<br>
+<br>
+
+<button (click)="isikanStore( {tanggal: '2024-01-01', nilai: 10000 })">Isikan Data Store 1</button>
+<button (click)="isikanStore( {tanggal: '2024-01-02', nilai: 20000 })">Isikan Data Store 2</button>
+
+
+<button (click)="tampilkanData()">Tampilkan data </button>
+<ul>
+    <li *ngFor="let item of listCash">
+<a>{{item.tanggal}}- {{item.nilai}}</a>
+
+    </li>
+</ul>
+
+<br>
+<br>
+
+<button (click)="updateStore( {tanggal: '2024-01-01', nilai: 11000 })">Update Data Store 1</button>
+<button (click)="updateStore( {tanggal: '2024-01-02', nilai: 21000 })">Update Data Store 2</button>
+
+<br>
+<br>
+
+<button (click)="deleteStore('2024-01-01')">Delete Data Store 1</button>
+<button (click)="deleteStore('2024-01-02')">Delete Data Store 2</button>
+<br>
+<br>
+
+<button (click)="resetStore()">Reset Store </button>
