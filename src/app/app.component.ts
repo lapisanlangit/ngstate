@@ -10,6 +10,8 @@ import {
   UpdateCash,
 } from './store/actions/cash.action';
 import { StateReset } from '@simfyz/ngxs-reset-plugin';
+import { RetrieveDesa } from './store/actions/desa.action';
+import { DesaState } from './store/state/desa.state';
 
 @Component({
   selector: 'app-root',
@@ -26,17 +28,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {}
 
   retrieveData() {
-    let nilai = [
-      {
-        tanggal: '2023-12-01',
-        nilai: 500,
-      },
-      {
-        tanggal: '2023-12-02',
-        nilai: 600,
-      },
-    ];
-    this.store.dispatch(new RetrieveCash(nilai)).subscribe({
+    //   this.store.dispatch(new Retrieve()).subscribe({
+    //     next: async () => {},
+    //     error: async (error) => {},
+    //   });
+    //
+    this.store.dispatch(new RetrieveDesa()).subscribe({
       next: async () => {},
       error: async (error) => {},
     });
@@ -69,6 +66,6 @@ export class AppComponent implements OnInit {
   }
 
   resetStore() {
-    this.store.dispatch(new StateReset(CashState));
+    this.store.dispatch(new StateReset(CashState, DesaState));
   }
 }

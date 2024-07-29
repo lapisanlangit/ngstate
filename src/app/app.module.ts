@@ -10,6 +10,7 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsResetPluginModule } from '@simfyz/ngxs-reset-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { HttpClientModule } from '@angular/common/http';
+import { DesaState } from './store/state/desa.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgxsModule.forRoot([CashState]),
+    NgxsModule.forRoot([CashState, DesaState]),
     NgxsResetPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ keys: '*' }),
     NgxsReduxDevtoolsPluginModule.forRoot(),

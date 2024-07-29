@@ -18,8 +18,15 @@ export class CashService {
     return this.http
       .get<any[]>(this.URL_ROOT + 'data/retrieveCash?tanggal=' + tanggal)
       .pipe(
-        catchError(this.handleError) // then handle the error
+        catchError(this.handleError), // then handle the error
       );
+  }
+
+  public retrieveDesa(): Observable<any[]> {
+    console.log(this.URL_ROOT + 'desa/retrieveDesa');
+    return this.http.get<any[]>(this.URL_ROOT + 'desa/retrieveDesa').pipe(
+      catchError(this.handleError), // then handle the error
+    );
   }
 
   public addCash(nilaiSimpan: any): Observable<any[]> {
@@ -48,7 +55,7 @@ export class CashService {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
       console.error(
-        `Backend returned code ${error.status}, ` + `body was: ${error.error}`
+        `Backend returned code ${error.status}, ` + `body was: ${error.error}`,
       );
     }
     // return an observable with a user-facing error message
