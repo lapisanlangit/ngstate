@@ -9,11 +9,11 @@ import {
   AddCash,
   UpdateCash,
   DeleteCash,
-  RetrieveCash,
-  RetrieveCashAPI,
   AddCashAPI,
   UpdateCashAPI,
   DeleteCashAPI,
+  InsertArrayCash,
+  InserArrayCashAPI,
 } from '../actions/cash.action';
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -32,32 +32,33 @@ export class CashStateModel {
 })
 @Injectable()
 export class CashState {
-  constructor(private cashservice: CashService) {}
+  constructor(private cashservice: CashService) { }
 
   @Selector()
   static getCashs(state: CashStateModel) {
     return state.cashs;
   }
 
-  @Action(RetrieveCash)
-  retrievecash(ctx: StateContext<CashStateModel>, action: RetrieveCash) {
-    const state = ctx.getState();
-
-    ctx.setState({
-      ...state,
-      cashs: [
-        {
-          ...state.cashs[0],
-          ...action.payload,
-        },
-      ],
-    });
+  @Action(InsertArrayCash)
+  insertarraycash(
+    { getState, patchState }: StateContext<CashStateModel>,
+    { payload }: InsertArrayCash,
+  ) {
+    const state = getState();
+    if (state.cashs.length == 0) {
+      for (let index = 0; index < payload.length; index++) {
+        const state = getState();
+        patchState({
+          cashs: [...state.cashs, payload[index]],
+        });
+      }
+    }
   }
 
   @Action(AddCash)
   addcash(
     { getState, patchState }: StateContext<CashStateModel>,
-    { payload }: AddCash
+    { payload }: AddCash,
   ) {
     const state = getState();
     patchState({
@@ -68,12 +69,12 @@ export class CashState {
   @Action(UpdateCash)
   updatecash(
     { getState, setState }: StateContext<CashStateModel>,
-    { payload }: UpdateCash
+    { payload }: UpdateCash,
   ) {
     const state = getState();
     const todoList = [...state.cashs];
     const todoIndex = todoList.findIndex(
-      (item) => item.tanggal === payload.tanggal
+      (item) => item.tanggal === payload.tanggal,
     );
     todoList[todoIndex] = payload;
     setState({
@@ -84,11 +85,11 @@ export class CashState {
   @Action(DeleteCash)
   deletecash(
     { getState, setState }: StateContext<CashStateModel>,
-    { payload }: DeleteCash
+    { payload }: DeleteCash,
   ) {
     const state = getState();
     const filteredArray = state.cashs.filter(
-      (item) => item.tanggal !== payload
+      (item) => item.tanggal !== payload,
     );
     setState({
       ...state,
@@ -96,10 +97,10 @@ export class CashState {
     });
   }
 
-  @Action(RetrieveCashAPI)
-  retrievecashApi(
+  @Action(InserArrayCashAPI)
+  insertarraycashApi(
     { getState, patchState }: StateContext<CashStateModel>,
-    { payload }: RetrieveCashAPI
+    { payload }: InserArrayCashAPI,
   ) {
     return this.cashservice.retrieveCash(payload).pipe(
       tap((result: any) => {
@@ -111,14 +112,14 @@ export class CashState {
             });
           }
         }
-      })
+      }),
     );
   }
 
   @Action(AddCashAPI)
   addcashApi(
     { getState, patchState }: StateContext<CashStateModel>,
-    { payload }: AddCashAPI
+    { payload }: AddCashAPI,
   ) {
     return this.cashservice.addCash(payload).pipe(
       tap((result: any) => {
@@ -128,14 +129,14 @@ export class CashState {
             cashs: [...state.cashs, payload],
           });
         }
-      })
+      }),
     );
   }
 
   @Action(UpdateCashAPI)
   updatecashApi(
     { getState, setState }: StateContext<CashStateModel>,
-    { payload }: UpdateCashAPI
+    { payload }: UpdateCashAPI,
   ) {
     return this.cashservice.updateCash(payload).pipe(
       tap((result: any) => {
@@ -143,7 +144,7 @@ export class CashState {
           const state = getState();
           const todoList = [...state.cashs];
           const todoIndex = todoList.findIndex(
-            (item) => item.tanggal === payload.tanggal
+            (item) => item.tanggal === payload.tanggal,
           );
           todoList[todoIndex] = payload;
           setState({
@@ -151,27 +152,27 @@ export class CashState {
             cashs: todoList,
           });
         }
-      })
+      }),
     );
   }
   @Action(DeleteCashAPI)
   deletecashApi(
     { getState, setState }: StateContext<CashStateModel>,
-    { payload }: DeleteCashAPI
+    { payload }: DeleteCashAPI,
   ) {
     return this.cashservice.deleteCash(payload).pipe(
       tap((result: any) => {
         if (result.error == 'false') {
           const state = getState();
           const filteredArray = state.cashs.filter(
-            (item) => item.tanggal !== payload.tanggal
+            (item) => item.tanggal !== payload.tanggal,
           );
           setState({
             ...state,
             cashs: filteredArray,
           });
         }
-      })
+      }),
     );
   }
 }
